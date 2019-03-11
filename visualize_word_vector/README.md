@@ -105,7 +105,7 @@ y3 = model.most_similar([u'爸', u'女'], [u'媽'], topn=3)
 
 
 ## Reference
-> 題目和Dataset來均來自 [NTUEE Hung-yi Lee Course Website](http://speech.ee.ntu.edu.tw/~tlkagk/courses_ML17.html)
+> 題目和Dataset均來自 [NTUEE Hung-yi Lee Course Website](http://speech.ee.ntu.edu.tw/~tlkagk/courses_ML17.html)
 >
 > [輕鬆理解CBOW模型](https://blog.csdn.net/u010665216/article/details/78724856)
 >
