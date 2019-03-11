@@ -101,7 +101,7 @@ y3 = model.most_similar([u'爸', u'女'], [u'媽'], topn=3)
 
 1.媽媽，媽，爸爸，爸，的位置相近
 
-2.覺
+2.覺得，
 
 ## Reference
 > 題目和Dataset來均來自 [NTUEE Hung-yi Lee Course Website](http://speech.ee.ntu.edu.tw/~tlkagk/courses_ML17.html)
