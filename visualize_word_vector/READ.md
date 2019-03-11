@@ -32,6 +32,16 @@ line = jieba.cut(line, cut_all=False)
 ~~~~
 [你, 喜歡, 吃, 水果, 嗎]
 
+## Word2Vec
+
+~~~~
+model = Word2Vec(sent_matrix, size=embd_size, window=s_window)
+~~~~
+
+使用gensim的Word2Vec，CBOW模式訓練Model
+
+emnd_size = 300, 表示將
+
 ## Results
 
 ~~~~
