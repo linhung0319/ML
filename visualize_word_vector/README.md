@@ -109,4 +109,6 @@ y3 = model.most_similar([u'爸', u'女'], [u'媽'], topn=3)
 >
 > [輕鬆理解CBOW模型](https://blog.csdn.net/u010665216/article/details/78724856)
 >
-> [解決matplotlib](https://medium.com/marketingdatascience/%E8%A7%A3%E6%B1%BApython-3-matplotlib%E8%88%87seaborn%E8%A6%96%E8%A6%BA%E5%8C%96%E5%A5%97%E4%BB%B6%E4%B8%AD%E6%96%87%E9%A1%AF%E7%A4%BA%E5%95%8F%E9%A1%8C-f7b3773a889b?fbclid=IwAR2KWGr7sVGLJR8xG3ZbGWwMBwEVm2rhTjQDWKg_RtPjHoCD_TowlMIuYzc)
+> [解決 matplotlib 中文圖片問題](https://medium.com/marketingdatascience/%E8%A7%A3%E6%B1%BApython-3-matplotlib%E8%88%87seaborn%E8%A6%96%E8%A6%BA%E5%8C%96%E5%A5%97%E4%BB%B6%E4%B8%AD%E6%96%87%E9%A1%AF%E7%A4%BA%E5%95%8F%E9%A1%8C-f7b3773a889b?fbclid=IwAR2KWGr7sVGLJR8xG3ZbGWwMBwEVm2rhTjQDWKg_RtPjHoCD_TowlMIuYzc)
+
+
