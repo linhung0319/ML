@@ -12,7 +12,19 @@
 
 ## Dataset
 
-> 578810條[中文句子](https://drive.google.com/file/d/1E5lElPutaWqKYPhSYLmVfw6olHjKDgdK/view)
+> 以下為[Dataset](https://drive.google.com/file/d/1E5lElPutaWqKYPhSYLmVfw6olHjKDgdK/view)片段，總共578810條中文句子
+
+~~~~
+沒有我得不到的
+現在你不誇獎我
+你要把握這個機會
+別在這裡丟人現眼
+當然要知道他的想法
+鐵的紀律的崇尚者對吧
+不要牽扯我身邊的人
+眼睜睜看她被你欺負
+文進你趕快打電話回去
+~~~~
 
 ## Preprocessing
 
@@ -40,7 +52,13 @@ model = Word2Vec(sent_matrix, size=embd_size, window=s_window)
 
 使用gensim的Word2Vec，CBOW模式訓練Model
 
-emnd_size = 300, 表示將
+可以理解為使用周圍的詞，來預測中間的詞為何。反過來說，語義相近的詞，其在句子中的周圍詞，也應該會類似
+
+![](https://github.com/linhung0319/ML/blob/master/visualize_word_vector/cbow_skip-gram.jpeg)
+
+emnd_size = 300, 將原本以one-hot encoding表示，每維代表一個詞彙的向量，投影到維度為300的座標系，其中相近語義的詞向量，會投影到相近的位置
+
+s_window = 4，以周圍的4個詞來預測中間詞
 
 ## Results
 
@@ -75,5 +93,17 @@ y3 = model.most_similar([u'爸', u'女'], [u'媽'], topn=3)
 
 兩向量相間，預計空格處應出現『男』，但結果卻不是，可能跟data量不夠多有關
 
+![](https://github.com/linhung0319/ML/blob/master/visualize_word_vector/tsne_embd300.png)
+
+使用TSNE將300維的詞向量，投影到2維，其中只選擇出現頻率在3000 - 6000的詞彙
+
+經過觀察可以發現：
+
+1.媽媽，媽，爸爸，爸，的位置相近
+
+2.覺
+
 ## Reference
-> 此題目和Dataset來均來自 [NTUEE Hung-yi Lee Course Website](http://speech.ee.ntu.edu.tw/~tlkagk/courses_ML17.html)
+> 題目和Dataset來均來自 [NTUEE Hung-yi Lee Course Website](http://speech.ee.ntu.edu.tw/~tlkagk/courses_ML17.html)
+>
+> [輕鬆理解CBOW模型](https://blog.csdn.net/u010665216/article/details/78724856)
