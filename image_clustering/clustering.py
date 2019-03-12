@@ -240,4 +240,4 @@ if __name__ == '__main__':
     test_AutoEncoder(x, y, embd_dim, ae_md, ae_km_md)
 
     # Test TSNE
-    #test_tsne(x, y)
+    test_tsne(x, y)
