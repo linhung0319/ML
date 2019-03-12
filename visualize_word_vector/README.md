@@ -1,5 +1,11 @@
 # Visualize Word Vector
 
+使用Gensim的Word2Vec Model，從眾多的中文句子內，學習詞彙間的關係
+
+依照詞彙間的語義關係，將詞彙投影到一個較低維的Embedding Space
+
+以TSNE將Embedding Space再壓縮成2維，以便繪圖
+
 ## Get Started
 
 > 以 python 2.7.15 執行
