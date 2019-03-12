@@ -89,32 +89,46 @@ def label_to_color(label):
             c.append('g')
     return c
 
-def train_pca(data, embd_dim=60, filename='pca_model.md'):
-    pca_model = PCA(n_components=embd_dim).fit(data)
-    pickle.dump(pca_model, open(filename, 'wb'))
+def train_pca(data, embd_dim=60, pca_md='pca_model.p', pca_km_md='pca_km.p'):
+    if not os.path.exists(pca_md):
+        pca_model = PCA(n_components=embd_dim).fit(data)
+        pickle.dump(pca_model, open(pca_md, 'wb'))
 
-def train_AutoEncoder(data, embd_dim, filename='ae_model.weight'):
+    if not os.path.exists(pca_km_md):
+        pca_model = pickle.load(open(pca_md, 'rb'))
+        x_pca = pca_model.transform(data)
+        pca_km_model = KMeans(n_clusters=2).fit(x_pca)
+        pickle.dump(pca_km_model, open(pca_km_md, 'wb'))
+
+def train_AutoEncoder(data, embd_dim, ae_md='ae_model.weight', ae_km_md='ae_km.p'):
     pic_matrix = normalize_img(data)
     split_ratio = 0.1
     train_num = int((1 - split_ratio) * pic_matrix.shape[0])
     pic_train = pic_matrix[:train_num]
     pic_test = pic_matrix[train_num:]
 
-    callbacks = []
-    callbacks.append(EarlyStopping(monitor='val_loss'))
-    callbacks.append(ModelCheckpoint(filepath=filename,
-                                     monitor='val_loss',
-                                     save_best_only=True,
-                                     save_weights_only=True ))
-
     ae = AutoEncoder(embd_dim)
     ae.AE_model.summary()
-    ae.AE_model.fit(pic_train, pic_train,
-                    epochs=50,
-                    batch_size=128,
-                    shuffle=True,
-                    validation_data=[pic_test, pic_test],
-                    callbacks=callbacks)
+    if not os.path.exists(ae_md):
+        callbacks = []
+        callbacks.append(EarlyStopping(monitor='val_loss'))
+        callbacks.append(ModelCheckpoint(filepath=ae_md,
+                                        monitor='val_loss',
+                                        save_best_only=True,
+                                        save_weights_only=True ))
+
+        ae.AE_model.fit(pic_train, pic_train,
+                        epochs=50,
+                        batch_size=128,
+                        shuffle=True,
+                        validation_data=[pic_test, pic_test],
+                        callbacks=callbacks)
+
+    if not os.path.exists(ae_km_md):
+        ae.load_weights(ae_md)
+        x_ae = ae.encoder.predict(pic_matrix)
+        ae_km_model = KMeans(n_clusters=2).fit(x_ae)
+        pickle.dump(ae_km_model, open(ae_km_md, 'wb'))
 
 class AutoEncoder():
     def __init__(self, embd_dim, img_dim=784):
@@ -146,12 +160,13 @@ def normalize_img(data):
     data = data.astype('float32') / 255
     return data
 
-def test_pca(x, y, filename):
+def test_pca(x, y, pca_md, pca_km_md):
     pic_width = 28
     print "Testing PCA..."
-    pca_model = pickle.load(open(filename, 'rb'))
+    pca_model = pickle.load(open(pca_md, 'rb'))
     x_pca = pca_model.transform(x)
-    y_pca = KMeans(n_clusters=2).fit_predict(x_pca)
+    pca_km_model = pickle.load(open(pca_km_md, 'rb'))
+    y_pca = pca_km_model.predict(x_pca)
     pca_cm = confusion_matrix(y, y_pca)
     plot_table(pca_cm, 'pca_cm.png')
     plot_scatter(x_pca[:,:2], y,
@@ -159,13 +174,15 @@ def test_pca(x, y, filename):
     plot_imgs(x, pic_width, pic_width,
               label=y_pca, filename='pca_img.png', size=36)
 
-def test_AutoEncoder(x, y, filename, embd_dim=60):
+def test_AutoEncoder(x, y, embd_dim, ae_md, ae_km_md):
     pic_width = 28
     print "Testing AutoEncoder..."
+    x = normalize_img(x)
     ae = AutoEncoder(embd_dim)
-    ae.load_weights(filename)
+    ae.load_weights(ae_md)
     x_ae = ae.encoder.predict(x)
-    y_ae = KMeans(n_clusters=2).fit_predict(x_ae)
+    ae_km_model = pickle.load(open(ae_km_md, 'rb'))
+    y_ae = ae_km_model.predict(x_ae)
     ae_cm = confusion_matrix(y, y_ae)
     plot_table(ae_cm, 'ae_cm.png')
     plot_scatter(x_ae[:,:2], y,
@@ -193,16 +210,16 @@ if __name__ == '__main__':
     pic_matrix = load_img('image.npy')
 
     # Train PCA
-    pca_md = 'pca_model.md'
-    if not os.path.exists(pca_md):
-        print "Training PCA..."
-        train_pca(pic_matrix, embd_dim, pca_md)
+    pca_md = 'pca_model.p'
+    pca_km_md = 'pca_km.p'
+    print "Training PCA..."
+    train_pca(pic_matrix, embd_dim, pca_md, pca_km_md)
 
     # Train AutoEncoder
     ae_md = 'ae_model.weight'
-    if not os.path.exists(ae_md):
-        print "Training AutoEncoder..."
-        train_AutoEncoder(pic_matrix, embd_dim, ae_md)
+    ae_km_md = 'ae_km.p'
+    print "Training AutoEncoder..."
+    train_AutoEncoder(pic_matrix, embd_dim, ae_md, ae_km_md)
 
     # Prepare Testing Data
     pic_width = 28
@@ -217,10 +234,10 @@ if __name__ == '__main__':
               label=y, filename='ori_img.png', size=36)
 
     # Test PCA
-    test_pca(x, y, pca_md)
+    test_pca(x, y, pca_md, pca_km_md)
 
     # Test AutoEncoder
-    test_AutoEncoder(x, y, ae_md, embd_dim)
+    test_AutoEncoder(x, y, embd_dim, ae_md, ae_km_md)
 
     # Test TSNE
-    test_tsne(x, y)
+    #test_tsne(x, y)
