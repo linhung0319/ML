@@ -105,6 +105,47 @@ AutoEncoder也有把『衣物』圖片誤判為『數字』圖片的問題，或
 
 預測準確率73.53%，稍低於PCA的準確率，然而其預測『衣物』
 
+## TSNE + KMeans
+
+~~~~
+from sklearn.manifold import TSNE
+from sklearn.cluster import KMeans
+~~~~
+
+~~~~
+x_tsne = TSNE(n_components=2, random_state=0).fit_transform(x)
+y_tsne = KMeans(n_clusters=2).fit_predict(x_tsne)
+~~~~
+
+直接在Testing Data上使用TSNE降至2維，再使用KMeans分成兩類
+
+![](https://github.com/linhung0319/ML/blob/master/image_clustering/tsne_2dim.png)
+
+以TSNE的2維作圖，可以觀察到TSNE將『衣物』和『數字』兩種圖片近乎完美的分開，因此KMeans能夠較好的將圖片分類
+
+![](https://github.com/linhung0319/ML/blob/master/image_clustering/tsne_img.png)
+
+隨機選取36張圖片，其預測的Label完全正確
+
+| Confusion Matrix | Predicted Number | Predicted Clothes |
+|:-----------------|:-----------------|:------------------|
+| True Number      | 4854 (TP)        | 146  (FP)         |
+| True Clothes     | 0    (FN)        | 5000 (TN)         |
+
+預測準確率98.54%，TSNE能夠很好的在低維度保留高維度時Data之間的關係
+
+TSNE的缺點：
+
+1. 空間複雜度和時間複雜度皆為O(n<sup>2<\sup>)，因此只適用於小量data
+    
+2. TSNE分出的Cluster可能不具有意義
+
+3. TSNE的Cluster間距離可能不代表真實Data類別的關係遠近
+
+4. Random Data通過TSNE後可能出現看似有規律關係的Pattern
+
 ## Reference
 
 > 題目和Dataset來均來自 [NTUEE Hung-yi Lee Course Website](http://speech.ee.ntu.edu.tw/~tlkagk/courses_ML17.html)
+>
+> [How to use t-SNE Effectly](https://distill.pub/2016/misread-tsne/)
