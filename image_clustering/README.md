@@ -136,7 +136,7 @@ y_tsne = KMeans(n_clusters=2).fit_predict(x_tsne)
 
 TSNE的缺點：
 
-1. 空間複雜度和時間複雜度皆為O(n<sup>2<\sup>)，因此只適用於小量data
+1. 空間複雜度和時間複雜度皆為O(n<sup>2</sup>)，因此只適用於小量data
     
 2. TSNE分出的Cluster可能不具有意義
 
@@ -148,4 +148,4 @@ TSNE的缺點：
 
 > 題目和Dataset來均來自 [NTUEE Hung-yi Lee Course Website](http://speech.ee.ntu.edu.tw/~tlkagk/courses_ML17.html)
 >
-> [How to use t-SNE Effectly](https://distill.pub/2016/misread-tsne/)
+> [How to use t-SNE Effectively](https://distill.pub/2016/misread-tsne/)
